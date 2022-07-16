@@ -1,0 +1,11 @@
+[package]
+name = "handler"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { version = "1.19", features = ["macros", "fs", "rt-multi-thread"] }
+warp = "0.3"
+futures = { version = "0.3", default-features = false }
+bytes = "1.1"
+reqwest = { version = "0.11", features = ["stream", "multipart"] }
