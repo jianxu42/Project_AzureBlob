@@ -6,8 +6,10 @@
       "direction": "in",
       "name": "req",
       "methods": [
+        "get",
         "post"
-      ]
+      ],
+      "route": "{*operation}"
     },
     {
       "type": "http",

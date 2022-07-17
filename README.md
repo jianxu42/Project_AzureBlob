@@ -1,9 +1,10 @@
-# upload-to-azure-blob
-Example of Upload file to Azure Blob
+# Blob Service
+
+Example of Azure Blob Service
 
 Run with `cargo run`. This starts a server at http://localhost:3000 with one route:
 
-* `POST /api/uploadfile` - you can upload a file here
+- `POST /api/putblob` - you can upload a file here
 
 Example upload request:
 

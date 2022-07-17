@@ -11,14 +11,14 @@ use warp::{
 #[tokio::main]
 async fn main() {
     let headers = warp::header::headers_cloned();
-    let upload_route = warp::post()
+    let put_blob_route = warp::post()
         .and(warp::path("api"))
-        .and(warp::path("uploadfile"))
-        .and(warp::multipart::form().max_length(1024 * 1024 * 1000))
+        .and(warp::path("putblob"))
+        .and(warp::multipart::form().max_length(1024 * 1024 * 10240))
         .and(headers)
-        .and_then(upload);
+        .and_then(put_blob);
 
-    let router = upload_route.recover(handle_rejection);
+    let router = put_blob_route.recover(handle_rejection);
     let port_key = "FUNCTIONS_CUSTOMHANDLER_PORT";
     let port: u16 = match env::var(port_key) {
         Ok(val) => val.parse().expect("Custom Handler port is not a number!"),
@@ -28,7 +28,7 @@ async fn main() {
     warp::serve(router).run((Ipv4Addr::LOCALHOST, port)).await
 }
 
-async fn upload(form: FormData, headers: HeaderMap) -> Result<impl Reply, Rejection> {
+async fn put_blob(form: FormData, headers: HeaderMap) -> Result<impl Reply, Rejection> {
     let parts: Vec<Part> = form.try_collect().await.map_err(|e| {
         eprintln!("form error: {}", e);
         warp::reject::reject()
