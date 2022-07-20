@@ -17,4 +17,4 @@ curl --location --request POST 'https://*.azurewebsites.net/api/putblob' \
 --form '=@"/C:/Users/Test/Downloads/test.txt"'
 ```
 
-- `GET /api/getblob` - you can upload a file here
+- `GET /api/getblob` - you can get a file here
