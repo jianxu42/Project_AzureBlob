@@ -19,11 +19,12 @@ pub async fn put_blob(form: FormData, headers: HeaderMap) -> Result<impl Reply, 
     let x_ms_blob_container = headers.get("x-ms-blob-container").unwrap();
 
     for p in parts {
+        let file_name = p.filename().unwrap().to_string();
         let url = format!(
             "https://{}.blob.core.windows.net/{}/{}{}",
             x_ms_blob_account.to_str().unwrap(),
             x_ms_blob_container.to_str().unwrap(),
-            p.filename().unwrap(),
+            file_name,
             x_ms_blob_sv.to_str().unwrap()
         );
 
@@ -40,7 +41,7 @@ pub async fn put_blob(form: FormData, headers: HeaderMap) -> Result<impl Reply, 
             })?;
 
         let part = reqwest::multipart::Part::bytes(value);
-        let file = reqwest::multipart::Form::new().part("part_bytes", part);
+        let file = reqwest::multipart::Form::new().part(file_name, part);
 
         let mut headers = HeaderMap::new();
         headers.insert("x-ms-blob-type", "BlockBlob".parse().unwrap());
