@@ -9,3 +9,7 @@ warp = "0.3"
 futures = { version = "0.3", default-features = false }
 bytes = "1.1"
 reqwest = { version = "0.11", features = ["stream", "multipart"] }
+
+[dev-dependencies]
+# assert_cmd = "2"
+# predicates = "2"
