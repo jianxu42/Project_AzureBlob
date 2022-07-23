@@ -28,7 +28,7 @@ pub async fn get_blob(file_name: String, headers: HeaderMap) -> Result<impl Repl
         .build()
         .unwrap();
 
-    let result = client.get(url).send().await.json::<String>().await;
+    let result = client.get(url).send().await;
 
     Ok(format!("{:?}", result))
 }
