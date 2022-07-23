@@ -8,6 +8,31 @@ use warp::{
     Rejection, Reply,
 };
 
+pub async fn get_blob(file_name: String, headers: HeaderMap) -> Result<impl Reply, Rejection> {
+    let x_ms_blob_account = headers.get("x-ms-blob-account").unwrap();
+    let x_ms_blob_sv = headers.get("x-ms-blob-sv").unwrap();
+    let x_ms_blob_container = headers.get("x-ms-blob-container").unwrap();
+    let url = format!(
+        "https://{}.blob.core.windows.net/{}/{}{}",
+        x_ms_blob_account.to_str().unwrap(),
+        x_ms_blob_container.to_str().unwrap(),
+        file_name,
+        x_ms_blob_sv.to_str().unwrap()
+    );
+
+    let mut headers = HeaderMap::new();
+    headers.insert("x-ms-blob-type", "BlockBlob".parse().unwrap());
+
+    let client = reqwest::Client::builder()
+        .default_headers(headers)
+        .build()
+        .unwrap();
+
+    let result = client.get(url).send().await.json::<String>().await;
+
+    Ok(format!("{:?}", result))
+}
+
 pub async fn put_blob(form: FormData, headers: HeaderMap) -> Result<impl Reply, Rejection> {
     let parts: Vec<Part> = form.try_collect().await.map_err(|e| {
         eprintln!("form error: {}", e);

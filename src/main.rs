@@ -10,8 +10,16 @@ async fn main() {
         .and(warp::multipart::form().max_length(1024 * 1024 * 10240))
         .and(headers)
         .and_then(handler::put_blob);
+    let get_blob_route = warp::get()
+        .and(warp::path("api"))
+        .and(warp::path("getblob"))
+        .and(warp::path::param())
+        .and(headers)
+        .and_then(handler::get_blob);
 
-    let router = put_blob_route.recover(handler::handle_rejection);
+    let router = put_blob_route
+        .or(get_blob_route)
+        .recover(handler::handle_rejection);
     let port_key = "FUNCTIONS_CUSTOMHANDLER_PORT";
     let port: u16 = match env::var(port_key) {
         Ok(val) => val.parse().expect("Custom Handler port is not a number!"),
