@@ -33,6 +33,11 @@ pub async fn get_blob(file_name: String, headers: HeaderMap) -> Result<impl Repl
     Ok(format!("{:?}", result))
 }
 
+// #[derive(Serialize, Deserialize, Debug)]
+// struct JSONResponse {
+//     json: HashMap<String, String>,
+// }
+
 pub async fn put_blob(form: FormData, headers: HeaderMap) -> Result<impl Reply, Rejection> {
     let parts: Vec<Part> = form.try_collect().await.map_err(|e| {
         eprintln!("form error: {}", e);
